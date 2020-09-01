@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>three.js</title>
+    <style>
+      body {
+        margin: 0;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r120/three.min.js"
+      integrity="sha512-kgjZw3xjgSUDy9lTU085y+UCVPz3lhxAtdOVkcO4O2dKl2VSBcNsQ9uMg/sXIM4SoOmCiYfyFO/n1/3GSXZtSg=="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      var scene, camera, renderer, box1, box2, box3;
+
+      init();
+
+      function init() {
+        // SCENE
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xaaaaaa);
+
+        // CAMERA
+        camera = new THREE.PerspectiveCamera(
+          75,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          1000
+        );
+        camera.position.z = 3;
+
+        // RENDERER
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // LIGHTS
+        const light = new THREE.DirectionalLight();
+        light.position.set(0, 1, 2);
+        scene.add(light);
+
+        // BOXES Mosaic
+        // 1
+        const geometry1 = new THREE.BoxGeometry(1, 1, 1);
+        const material1 = new THREE.MeshStandardMaterial({
+          color: new THREE.Color("skyblue"),
+        });
+        box1 = new THREE.Mesh(geometry1, material1);
+        scene.add(box1);
+        // 2
+        const geometry2 = new THREE.BoxGeometry(1, 1, 1);
+        const material2 = new THREE.MeshStandardMaterial({
+          color: new THREE.Color("pink"),
+        });
+        box2 = new THREE.Mesh(geometry2, material2);
+        scene.add(box2);
+        box2.position.x = -1.5;
+        // 3
+        const geometry3 = new THREE.BoxGeometry(1, 1, 1);
+        const material3 = new THREE.MeshStandardMaterial({
+          color: new THREE.Color("aliceblue"),
+        });
+        box3 = new THREE.Mesh(geometry3, material3);
+        scene.add(box3);
+        box3.position.x = 1.5;
+
+        window.addEventListener("resize", onResize, false);
+
+        // ANIMATION +  MOVEMENT
+        update();
+      }
+
+      // RENDERER (60FPS X S) + ANIMATIONS
+      function update() {
+        requestAnimationFrame(update);
+        renderer.render(scene, camera);
+        box1.rotation.y += 0.01;
+        //box1.rotation.z += 0.02;
+        box2.rotation.y += -0.01;
+        box3.rotation.y += -0.01;
+      }
+
+      // HELPER FUNCTION ON RESIZING WINDOW
+      function onResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+    </script>
+  </body>
+</html>
